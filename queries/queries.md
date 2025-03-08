@@ -43,6 +43,7 @@ These queries provide more complex insights, combining multiple tables and condi
 **List all translation options for tour descriptions:**  
 
 `SELECT trad AS language, value AS description FROM TOUR_DESCR_TRAD;`  
+
 ---
 
 ### **Specific Queries**
@@ -82,7 +83,8 @@ Focused on particular cases, these queries address specific scenarios such as id
 `SELECT t.name_it AS tour_name, COUNT(ac.poi_id) AS num_pois`  
 `FROM TOUR t JOIN location loc ON t.classid = loc.classid`  
 `JOIN art_category ac ON loc.event = ac.poi_id JOIN CATEGORY c ON ac.cat_id = c.cat_id WHERE c.name_it = 'Art and Culture'`  
-`GROUP BY t.name_it ORDER BY num_pois DESC;`  
+`GROUP BY t.name_it ORDER BY num_pois DESC;` 
+
 ---
 
 ### **Advanced Queries**
