@@ -16,13 +16,13 @@ DataGEMS aims to overcome these challenges by creating an advanced data discover
 - Flexible Search & Discovery: Supports natural language and pattern-based queries, enabling more efficient searches within and across datasets.
 - Guided Exploration: Suggests relevant datasets and uncovers hidden connections, helping users discover new insights without complex query building.
 ### 🎯 Project Objectives
-- 1. Advanced Discovery Tools
+1. Advanced Discovery Tools
 Move beyond basic keyword searches to facilitate deeper, more meaningful exploration of datasets.
-- 2. Enriched Data Profiling
+2. Enriched Data Profiling
 Improve the quality of metadata to make datasets more discoverable and relevant for users.
-- 3. Sustainable Open-Source Ecosystem
+3. Sustainable Open-Source Ecosystem
 Develop open-source tools that empower all stages of the data lifecycle—from storage to analysis and reuse.
-- 4. Broad Integration & Accessibility
+4. Broad Integration & Accessibility
 Expand access to diverse user groups, from researchers to policymakers, ensuring that the FAIR principles are applied across domains.
 ### 🌟 Ambition: Next-Generation Data Management
 At DataGEMS, we envision a unified system that makes data and datasets first-class citizens within the ecosystem. By leveraging MoMa (Model for Data Management and Discovery) and integrating advanced machine learning models, we will create an environment that simplifies the management and discovery of data—making it more accessible and usable for everyone.
