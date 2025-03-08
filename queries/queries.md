@@ -2,18 +2,26 @@
 
 These queries retrieve fundamental information about tours, points of interest (POIs), categories, events, and more. They provide basic details for the database exploration.
 
-**Retrieve all available tours and their descriptions:**  
+**Retrieve all available tours and their descriptions:** 
+
 `SELECT name_it AS tour_name, descr_it AS description FROM TOUR;`  
+
 **List all points of interest (POIs) and their open times:**  
+
 `SELECT name_it AS poi_name, open_time FROM ART;`  
-**Get all tourist categories and their names:**  
+
+**Get all tourist categories and their names:** 
+
 `SELECT cat_id, name_it AS category_name FROM CATEGORY;`  
+
 **Retrieve all tours grouped by their type:**  
-`SELECT t.type, COUNT(t.classid) AS num_tours FROM TOUR t`  
-`JOIN TOUR_TYPE tt ON t.type = tt.id GROUP BY t.type;`  
-**Find all events and their associated categories:**  
-`SELECT e.name_it AS event_name, ec.category FROM EVENT e`  
-`JOIN EVENT_CATEGORY ec ON e.event_id = ec.event;`  
+
+`SELECT t.type, COUNT(t.classid) AS num_tours FROM TOUR t JOIN TOUR_TYPE tt ON t.type = tt.id GROUP BY t.type;`  
+
+**Find all events and their associated categories:** 
+
+`SELECT e.name_it AS event_name, ec.category FROM EVENT e  JOIN EVENT_CATEGORY ec ON e.event_id = ec.event;`  
+
 ---
 
 ### **Intermediate Queries**
@@ -21,14 +29,19 @@ These queries retrieve fundamental information about tours, points of interest (
 These queries provide more complex insights, combining multiple tables and conditions to deliver detailed and segmented results.
 
 **List all points of interest that belong to specific categories:**  
-`SELECT a.name_it AS poi_name, c.name_it AS category_name FROM ART a`  
-`JOIN ART_CATEGORY ac ON a.poi_id = ac.poi_id JOIN CATEGORY c ON ac.cat_id = c.cat_id;`  
-**Get the schedule of a specific POI (e.g., Verona Arena):**  
-`SELECT cal.day, cal.start_time, cal.end_time FROM CALENDAR cal`  
-`JOIN LOCATION loc ON cal.classid = loc.classid JOIN ART a ON loc.num = 1 AND loc.event = a.poi_id WHERE a.name_it = 'Verona Arena';`  
+
+`SELECT a.name_it AS poi_name, c.name_it AS category_name FROM ART a JOIN ART_CATEGORY ac ON a.poi_id = ac.poi_id JOIN CATEGORY c ON ac.cat_id = c.cat_id;` 
+
+**Get the schedule of a specific POI (e.g., Verona Arena):** 
+
+`SELECT cal.day, cal.start_time, cal.end_time FROM CALENDAR cal JOIN LOCATION loc ON cal.classid = loc.classid JOIN ART a ON loc.num = 1 AND loc.event = a.poi_id WHERE a.name_it = 'Verona Arena';`  
+
 **Retrieve all tours with their estimated duration and length:**  
-`SELECT name_it AS tour_name, duration, length FROM TOUR;`  
+
+`SELECT name_it AS tour_name, duration, length FROM TOUR;` 
+ 
 **List all translation options for tour descriptions:**  
+
 `SELECT trad AS language, value AS description FROM TOUR_DESCR_TRAD;`  
 ---
 
