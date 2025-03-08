@@ -14,14 +14,6 @@ These queries retrieve fundamental information about tours, points of interest (
 
 `SELECT cat_id, name_it AS category_name FROM CATEGORY;`  
 
-**Retrieve all tours grouped by their type:**  
-
-`SELECT t.type, COUNT(t.classid) AS num_tours FROM TOUR t JOIN TOUR_TYPE tt ON t.type = tt.id GROUP BY t.type;`  
-
-**Find all events and their associated categories:** 
-
-`SELECT e.name_it AS event_name, ec.category FROM EVENT e  JOIN EVENT_CATEGORY ec ON e.event_id = ec.event;`  
-
 ---
 
 ### **Intermediate Queries**
@@ -30,7 +22,7 @@ These queries provide more complex insights, combining multiple tables and condi
 
 **List all points of interest that belong to specific categories:**  
 
-`SELECT a.name_it AS poi_name, c.name_it AS category_name FROM ART a JOIN ART_CATEGORY ac ON a.poi_id = ac.poi_id JOIN CATEGORY c ON ac.cat_id = c.cat_id;` 
+` SELECT a.name_it AS poi_name, c.name_it AS category_name FROM ART a JOIN ART_CATEGORY ac ON a.classid = ac.classid JOIN art_category c ON ac.classid = c.classid; ` 
 
 **Get the schedule of a specific POI (e.g., Verona Arena):** 
 
@@ -42,7 +34,7 @@ These queries provide more complex insights, combining multiple tables and condi
  
 **List all translation options for tour descriptions:**  
 
-`SELECT trad AS language, value AS description FROM TOUR_DESCR_TRAD;`  
+`SELECT classref AS language, descr_trad_lang AS description FROM TOUR_DESCR_TRAD_T;`  
 
 ---
 
@@ -52,38 +44,31 @@ Focused on particular cases, these queries address specific scenarios such as id
 
 **Find the most frequently visited POIs using Verona Card activations:**
 
-`SELECT a.name_it AS poi_name, COUNT(lvc.art) AS visit_count FROM LOG_VC lvc JOIN art a ON lvc.art = a.poi_id GROUP BY a.name_it ORDER BY visit_count DESC LIMIT 5;`
+`SELECT a.name_it AS poi_name, COUNT(lvc.poi) AS visit_count FROM LOG_VC lvc JOIN art a ON lvc.poi = a.classid GROUP BY a.name_it ORDER BY visit_count DESC LIMIT 5;`
 
 **Get all paths that are part of a tour, including proximity area and duration:**
 
-`SELECT t.name_it AS tour_name, t.proximity_area, t.duration`  
-`FROM TOUR t`  
+`SELECT t.name_it AS tour_name, t.proximity_area, t.duration `
+`FROM TOUR t `
 `WHERE t.proximity_area IS NOT NULL;`  
 
 **Retrieve tours that include specific points of interest:**  
 
-`SELECT t.name_it AS tour_name, a.name_it AS poi_name`  
-`FROM tour t JOIN location loc ON t.classid = loc.classid`  
-`JOIN ART a ON loc.num = 1 AND loc.event = a.poi_id WHERE a.name_it = 'Castelvecchio Museum';`  
+`SELECT t.name_it AS tour_name, a.name_it AS poi_name` 
+`FROM tour t JOIN location loc ON t.classid = loc.classid` 
+`JOIN ART a ON loc.num = 1 AND loc.event = a.classid WHERE a.name_it = 'Castelvecchio Museum';`  
 
 **Find the most famous tour paths based on tourist activity:**  
 
-`SELECT t.name_it AS tour_name, COUNT(lvc.id_vc) AS visit_count`  
-`FROM tour t JOIN log_vc lvc ON t.classid = lvc.art GROUP BY t.name_it`  
+`SELECT t.name_it AS tour_name, COUNT(lvc.id_vc) AS visit_count`
+`FROM tour t JOIN log_vc lvc ON t.classid = lvc.poi GROUP BY t.name_it`
 `ORDER BY visit_count DESC LIMIT 3;` 
 
 **List all available paths with translation options for their names:**  
 
-`SELECT t.name_it AS tour_name, tnt.value AS translated_name, tnt.trad AS language`  
-`FROM TOUR t`  
-`JOIN TOUR_NAME_TRAD tnt ON t.classid = tnt.poi_id;` 
-
-**Find tours that cover the most POIs in a given category (e.g., "Art and Culture"):**  
-
-`SELECT t.name_it AS tour_name, COUNT(ac.poi_id) AS num_pois`  
-`FROM TOUR t JOIN location loc ON t.classid = loc.classid`  
-`JOIN art_category ac ON loc.event = ac.poi_id JOIN CATEGORY c ON ac.cat_id = c.cat_id WHERE c.name_it = 'Art and Culture'`  
-`GROUP BY t.name_it ORDER BY num_pois DESC;` 
+`SELECT t.name_it AS tour_name, tnt.name_trad_value AS translated_name, tnt.name_trad_lang AS language ` 
+`FROM TOUR t ` 
+`JOIN TOUR_NAME_TRAD_T tnt ON t.classid = tnt.classref;` 
 
 ---
 
@@ -93,21 +78,14 @@ These queries aim for more advanced analysis, focusing on trends, specific perio
 
 **Find the most famous paths visited during a specific time period (e.g., last month):**
 
-`SELECT t.name_it AS tour_name, COUNT(lvc.id_vc) AS visit_count FROM LOG_VC lvc JOIN TOUR t ON lvc.art = t.classid WHERE lvc.date_time BETWEEN '2024-12-01' AND '2024-12-31' GROUP BY t.name_it ORDER BY visit_count DESC;`
-
-**Identify the best-rated paths based on weather conditions (e.g., no rain, moderate wind).**
-
-`SELECT t.name_it AS tour_name, w.data, w.wind, w.rain FROM tour t JOIN WEATHER w ON w.station_id = t.classid WHERE w.rain = 0 AND w.wind < 10;`
+`SELECT t.name_it AS tour_name, COUNT(lvc.id_vc) AS visit_count FROM LOG_VC lvc JOIN TOUR t ON lvc.poi = t.classid WHERE lvc.istante BETWEEN '2019-12-01' AND '2019-12-31' GROUP BY t.name_it ORDER BY visit_count DESC;`
 
 **Retrieve POIs, their paths, and Verona Card activation statistics:**
 
-`SELECT a.name_it AS poi_name, t.name_it AS tour_name, COUNT(lvc.id_vc) AS activation_count FROM ART a JOIN location loc ON a.poi_id = loc.event JOIN tour t ON loc.classid = t.classid JOIN LOG_VC lvc ON a.poi_id = lvc.art GROUP BY a.name_it, t.name_it ORDER BY activation_count DESC;`  
-**Find paths near a specific POI within a given proximity area:**  
-`SELECT t.name_it AS tour_name, t.proximity_area FROM TOUR t`  
-`JOIN location loc ON t.classid = loc.classid WHERE loc.event = (SELECT poi_id FROM ART WHERE name_it = 'Piazza delle Erbe') AND t.proximity_area < 1;  -- Proximity area within 1 km`  
+`SELECT a.name_it AS poi_name, t.name_it AS tour_name, COUNT(lvc.id_vc) AS activation_count FROM ART a JOIN location loc ON a.classid = loc.event JOIN tour t ON loc.classid = t.classid JOIN LOG_VC lvc ON a.classid = lvc.poi GROUP BY a.name_it, t.name_it ORDER BY activation_count DESC;`  
+  
 **Calculate the average tour duration and length across all paths:**  
-`SELECT AVG(duration) AS avg_duration, AVG(length) AS avg_length`  
-`FROM tour;`
+`SELECT AVG(duration) AS avg_duration, AVG(length) AS avg_length FROM tour;`
 
 ---
 
