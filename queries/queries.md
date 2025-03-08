@@ -58,19 +58,27 @@ Focused on particular cases, these queries address specific scenarios such as id
 `SELECT t.name_it AS tour_name, t.proximity_area, t.duration`  
 `FROM TOUR t`  
 `WHERE t.proximity_area IS NOT NULL;`  
+
 **Retrieve tours that include specific points of interest:**  
+
 `SELECT t.name_it AS tour_name, a.name_it AS poi_name`  
 `FROM tour t JOIN location loc ON t.classid = loc.classid`  
 `JOIN ART a ON loc.num = 1 AND loc.event = a.poi_id WHERE a.name_it = 'Castelvecchio Museum';`  
+
 **Find the most famous tour paths based on tourist activity:**  
+
 `SELECT t.name_it AS tour_name, COUNT(lvc.id_vc) AS visit_count`  
 `FROM tour t JOIN log_vc lvc ON t.classid = lvc.art GROUP BY t.name_it`  
-`ORDER BY visit_count DESC LIMIT 3;`  
+`ORDER BY visit_count DESC LIMIT 3;` 
+
 **List all available paths with translation options for their names:**  
+
 `SELECT t.name_it AS tour_name, tnt.value AS translated_name, tnt.trad AS language`  
 `FROM TOUR t`  
-`JOIN TOUR_NAME_TRAD tnt ON t.classid = tnt.poi_id;`  
+`JOIN TOUR_NAME_TRAD tnt ON t.classid = tnt.poi_id;` 
+
 **Find tours that cover the most POIs in a given category (e.g., "Art and Culture"):**  
+
 `SELECT t.name_it AS tour_name, COUNT(ac.poi_id) AS num_pois`  
 `FROM TOUR t JOIN location loc ON t.classid = loc.classid`  
 `JOIN art_category ac ON loc.event = ac.poi_id JOIN CATEGORY c ON ac.cat_id = c.cat_id WHERE c.name_it = 'Art and Culture'`  
